@@ -1,9 +1,37 @@
 import { createServer } from 'http';
+import * as fs from 'fs';
+import * as url from 'url';
+import * as path from 'path';
 
 const port = 8080;
 
 const server = createServer((request, response) => {
-  response.end('Hello world');
+  const uri = url.parse(request.url!).pathname;
+  let filename = path.join(process.cwd(), uri!);
+
+  fs.exists(filename, exists => {
+    if (!exists) {
+      response.writeHead(404, { 'Content-Type': 'text/plain' });
+      response.write('404 Not Found\n');
+      response.end();
+      return;
+    }
+
+    if (fs.statSync(filename).isDirectory()) filename += '/index.html';
+
+    fs.readFile(filename, 'binary', function(err, file) {
+      if (err) {
+        response.writeHead(500, { 'Content-Type': 'text/plain' });
+        response.write(err + '\n');
+        response.end();
+        return;
+      }
+
+      response.writeHead(200);
+      response.write(file, 'binary');
+      response.end();
+    });
+  });
 });
 
 server.listen(port, (err: any) => {
