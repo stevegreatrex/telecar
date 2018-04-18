@@ -2,6 +2,7 @@ import { createServer } from 'http';
 import * as fs from 'fs';
 import * as url from 'url';
 import * as path from 'path';
+import { Server } from 'ws';
 
 const port = 8080;
 
@@ -37,4 +38,12 @@ const server = createServer((request, response) => {
 server.listen(port, (err: any) => {
   if (err) console.error('Error on startup', err);
   else console.log(`Server is listening on ${port}`);
+});
+
+const socketServer = new Server({ port: 8090 });
+let currentDirection: string;
+socketServer.on('connection', ws => {
+  ws.on('message', (direction: string) => {
+    console.log(`Incoming: ${direction}`);
+  });
 });

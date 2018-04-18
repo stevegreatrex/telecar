@@ -4,6 +4,7 @@ const http_1 = require("http");
 const fs = require("fs");
 const url = require("url");
 const path = require("path");
+const ws_1 = require("ws");
 const port = 8080;
 const server = http_1.createServer((request, response) => {
     const uri = url.parse(request.url).pathname;
@@ -35,4 +36,11 @@ server.listen(port, (err) => {
         console.error('Error on startup', err);
     else
         console.log(`Server is listening on ${port}`);
+});
+const socketServer = new ws_1.Server({ port: 8090 });
+let currentDirection;
+socketServer.on('connection', ws => {
+    ws.on('message', (direction) => {
+        console.log(`Incoming: ${direction}`);
+    });
 });
