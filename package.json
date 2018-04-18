@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "prestart": "npm install && tsc",
+    "prestart": "tsc",
     "start": "node dist/server.js"
   },
   "keywords": [],
