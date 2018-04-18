@@ -1,5 +1,5 @@
 const inputSink = document.getElementsByClassName('controls-container')[0];
-const log = document.getElementsByClassName('log')[0];
+const logContainer = document.getElementsByClassName('log')[0];
 const arrow = document.getElementsByClassName('arrow')[0];
 
 let connected = false;
@@ -44,27 +44,31 @@ try {
 
   function setDirection(y: YDirection, x: XDirection) {
     const description = `${y} ${x || ''}`;
-    log.innerHTML = description;
+    log(description);
     arrow.setAttribute('class', `arrow visible ${y} ${x}`);
     socket.send(description);
   }
 
   function clearDirection() {
-    log.innerHTML = '';
+    log('');
     arrow.setAttribute('class', 'arrow');
   }
 
   const socket = new WebSocket('ws://localhost:8090');
   socket.onopen = () => {
-    log.innerHTML = 'Connected';
+    log('Connected');
     connected = true;
   };
 
   socket.onclose = e => {
-    log.innerHTML = JSON.stringify(e);
+    log(JSON.stringify(e));
   };
 
-  log.innerHTML = 'Loaded';
+  log('Loaded');
 } catch (err) {
-  log.innerHTML = JSON.stringify(err, null, 2);
+  log(JSON.stringify(err, null, 2));
+}
+
+function log(text: string) {
+  logContainer.innerHTML += `\r\n${text}`;
 }
