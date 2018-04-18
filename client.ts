@@ -78,5 +78,5 @@ try {
 }
 
 function log(text: string) {
-  logContainer.innerHTML += `\r\n${text}`;
+  logContainer.innerHTML = text;
 }

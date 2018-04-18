@@ -67,5 +67,5 @@ catch (err) {
     log(`overall error: ${JSON.stringify(err, null, 2)}`);
 }
 function log(text) {
-    logContainer.innerHTML += `\r\n${text}`;
+    logContainer.innerHTML = text;
 }
