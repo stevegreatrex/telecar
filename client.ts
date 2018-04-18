@@ -59,6 +59,11 @@ try {
     log.innerHTML = 'Connected';
     connected = true;
   };
+
+  socket.onerror = err => {
+    log.innerHTML = JSON.stringify(err);
+  };
+
   log.innerHTML = 'Loaded';
 } catch (err) {
   log.innerHTML = JSON.stringify(err, null, 2);
