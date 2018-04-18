@@ -66,6 +66,10 @@ try {
     log(`close reason: ${e.reason}`);
   };
 
+  socket.onerror = e => {
+    log(`error: ${JSON.stringify(e)}`);
+  };
+
   log('Loaded');
 } catch (err) {
   log(`overall error: ${JSON.stringify(err, null, 2)}`);
