@@ -54,7 +54,7 @@ try {
     arrow.setAttribute('class', 'arrow');
   }
 
-  const socket = new WebSocket('ws://localhost:8090');
+  const socket = new WebSocket(`ws://${window.location.host}:8090`);
   socket.onopen = () => {
     log('Connected');
     connected = true;
