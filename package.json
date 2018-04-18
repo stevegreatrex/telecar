@@ -1,0 +1,19 @@
+{
+  "name": "telecar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^2.8.1"
+  },
+  "devDependencies": {
+    "webpack": "^4.6.0"
+  },
+  "prettier": {
+    "singleQuote": true
+  }
+}
