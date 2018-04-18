@@ -59,6 +59,7 @@ try {
     log.innerHTML = 'Connected';
     connected = true;
   };
+  log.innerHTML = 'Loaded';
 } catch (err) {
   log.innerHTML = JSON.stringify(err, null, 2);
 }
