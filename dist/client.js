@@ -54,12 +54,14 @@ try {
         connected = true;
     };
     socket.onclose = e => {
-        log(JSON.stringify(e));
+        log(`close error: ${JSON.stringify(e)}`);
+        log(`close code: ${e.code}`);
+        log(`close reason: ${e.reason}`);
     };
     log('Loaded');
 }
 catch (err) {
-    log(JSON.stringify(err, null, 2));
+    log(`overall error: ${JSON.stringify(err, null, 2)}`);
 }
 function log(text) {
     logContainer.innerHTML += `\r\n${text}`;
