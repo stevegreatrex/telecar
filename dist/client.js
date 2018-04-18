@@ -53,8 +53,8 @@ try {
         log.innerHTML = 'Connected';
         connected = true;
     };
-    socket.onerror = err => {
-        log.innerHTML = JSON.stringify(err);
+    socket.onclose = e => {
+        log.innerHTML = JSON.stringify(e);
     };
     log.innerHTML = 'Loaded';
 }
