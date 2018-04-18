@@ -62,6 +62,12 @@ socketServer.on('connection', ws => {
         }
     }));
 });
+const asyncExec = (command) => new Promise((resolve, reject) => child_process_1.exec(command, err => {
+    if (err)
+        reject(err);
+    else
+        resolve();
+}));
 const initGpio = () => __awaiter(this, void 0, void 0, function* () {
     yield asyncExec('gpio mode 1 out');
     yield asyncExec('gpio mode 6 out');
@@ -69,12 +75,6 @@ const initGpio = () => __awaiter(this, void 0, void 0, function* () {
     yield asyncExec('gpio mode 27 out');
 });
 initGpio();
-const asyncExec = (command) => new Promise((resolve, reject) => child_process_1.exec(command, err => {
-    if (err)
-        reject(err);
-    else
-        resolve();
-}));
 const commands = {
     forward: ['gpio write 27 0'],
     'forward left': ['gpio write 27 0', 'gpio write 6 0'],

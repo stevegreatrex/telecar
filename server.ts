@@ -58,6 +58,14 @@ socketServer.on('connection', ws => {
   });
 });
 
+const asyncExec = (command: string) =>
+  new Promise((resolve, reject) =>
+    exec(command, err => {
+      if (err) reject(err);
+      else resolve();
+    })
+  );
+
 const initGpio = async () => {
   await asyncExec('gpio mode 1 out');
   await asyncExec('gpio mode 6 out');
@@ -66,14 +74,6 @@ const initGpio = async () => {
 };
 
 initGpio();
-
-const asyncExec = (command: string) =>
-  new Promise((resolve, reject) =>
-    exec(command, err => {
-      if (err) reject(err);
-      else resolve();
-    })
-  );
 
 const commands: { [key: string]: string[] } = {
   forward: ['gpio write 27 0'],
