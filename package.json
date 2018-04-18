@@ -2,8 +2,11 @@
   "name": "telecar",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "scripts": {},
+  "main": "dist/server.js",
+  "scripts": {
+    "prestart": "npm install && tsc",
+    "start": "node dist/server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
