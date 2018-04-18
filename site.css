@@ -51,6 +51,7 @@ body {
   display: none;
   font-size: 50px;
   font-weight: bold;
+  transition: transform 0.5s;
 }
 
 .arrow.visible {

@@ -28,6 +28,8 @@ inputSink.addEventListener('touchmove', e => {
     if (xOffset > 30)
         xDirection = newX < touchX ? 'left' : 'right';
     setDirection(yDirection, xDirection);
+    const size = Math.max(Math.max(Math.abs(newY - touchY), xOffset) * 4, 50);
+    arrow.setAttribute('style', `font-size: ${size}%`);
 });
 inputSink.addEventListener('touchend', e => {
     if (!connected)
