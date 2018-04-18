@@ -52,6 +52,7 @@ try {
   function clearDirection() {
     log('');
     arrow.setAttribute('class', 'arrow');
+    socket.send('');
   }
 
   const socket = new WebSocket(
