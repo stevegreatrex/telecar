@@ -59,12 +59,21 @@ socketServer.on('connection', ws => {
 });
 
 const asyncExec = (command: string) =>
-  new Promise((resolve, reject) =>
-    exec(command, err => {
-      if (err) reject(err);
-      else resolve();
-    })
-  );
+  new Promise((resolve, reject) => {
+    console.log(`Executing ${command}`);
+    exec(command, (err, stdout, stderr) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else if (stderr) {
+        console.error(stderr);
+        reject(stderr);
+      } else {
+        console.log(stdout);
+        resolve();
+      }
+    });
+  });
 
 const initGpio = async () => {
   await asyncExec('gpio mode 1 out');
