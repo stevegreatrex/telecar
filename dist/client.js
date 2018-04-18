@@ -47,6 +47,7 @@ try {
     function clearDirection() {
         log('');
         arrow.setAttribute('class', 'arrow');
+        socket.send('');
     }
     const socket = new WebSocket(`ws://${window.location.host.replace(`:${window.location.port}`, '')}:8090`);
     socket.onopen = () => {

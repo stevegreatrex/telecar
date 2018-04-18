@@ -65,6 +65,8 @@ const initGpio = async () => {
   await asyncExec('gpio mode 27 out');
 };
 
+initGpio();
+
 const asyncExec = (command: string) =>
   new Promise((resolve, reject) =>
     exec(command, err => {
