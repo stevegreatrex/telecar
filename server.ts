@@ -8,8 +8,10 @@ import { CarState } from './CarState';
 import { InitCommand } from './InitCommand';
 import { ICommand } from './ICommand';
 import { MoveCommand } from './MoveCommand';
+import * as colors from 'colors/safe';
 
-const port = 8080;
+const httpPort = 8080;
+const wsPort = 8090;
 
 const server = createServer((request, response) => {
   const uri = url.parse(request.url!).pathname;
@@ -40,9 +42,9 @@ const server = createServer((request, response) => {
   });
 });
 
-server.listen(port, (err: any) => {
-  if (err) console.error('Error on startup', err);
-  else log(`Server is listening on ${port}`);
+server.listen(httpPort, (err: any) => {
+  if (err) error('Error on startup', err);
+  else log(`Server is listening on ${httpPort}`);
 });
 
 const socketServer = new Server({ port: 8090 });
@@ -62,10 +64,10 @@ const asyncExec = (command: ICommand) =>
     log(`${command.debugInfo} ${command.commandString}`);
     exec(command.commandString, (err, stdout, stderr) => {
       if (err) {
-        console.error(err);
+        error(err);
         reject(err);
       } else if (stderr) {
-        console.error(stderr);
+        error(stderr);
         reject(stderr);
       } else {
         log(stdout);
@@ -77,7 +79,11 @@ const asyncExec = (command: ICommand) =>
 asyncExec(new InitCommand());
 
 function log(message: any) {
-  console.log(`${new Date().toISOString()} ${message}`);
+  console.log(`${colors.gray(new Date().toISOString())} ${message}`);
+}
+
+function error(message: any, err?: any) {
+  log(`${colors.red(message)} {err}`);
 }
 
 const commands: { [key: string]: string[] } = {};

@@ -17,7 +17,9 @@ const child_process_1 = require("child_process");
 const CarState_1 = require("./CarState");
 const InitCommand_1 = require("./InitCommand");
 const MoveCommand_1 = require("./MoveCommand");
-const port = 8080;
+const colors = require("colors/safe");
+const httpPort = 8080;
+const wsPort = 8090;
 const server = http_1.createServer((request, response) => {
     const uri = url.parse(request.url).pathname;
     let filename = path.join(process.cwd(), uri);
@@ -43,11 +45,11 @@ const server = http_1.createServer((request, response) => {
         });
     });
 });
-server.listen(port, (err) => {
+server.listen(httpPort, (err) => {
     if (err)
-        console.error('Error on startup', err);
+        error('Error on startup', err);
     else
-        log(`Server is listening on ${port}`);
+        log(`Server is listening on ${httpPort}`);
 });
 const socketServer = new ws_1.Server({ port: 8090 });
 let currentState = new CarState_1.CarState();
@@ -66,11 +68,11 @@ const asyncExec = (command) => new Promise((resolve, reject) => {
     log(`${command.debugInfo} ${command.commandString}`);
     child_process_1.exec(command.commandString, (err, stdout, stderr) => {
         if (err) {
-            console.error(err);
+            error(err);
             reject(err);
         }
         else if (stderr) {
-            console.error(stderr);
+            error(stderr);
             reject(stderr);
         }
         else {
@@ -81,6 +83,9 @@ const asyncExec = (command) => new Promise((resolve, reject) => {
 });
 asyncExec(new InitCommand_1.InitCommand());
 function log(message) {
-    console.log(`${new Date().toISOString()} ${message}`);
+    console.log(`${colors.gray(new Date().toISOString())} ${message}`);
+}
+function error(message, err) {
+    log(`${colors.red(message)} {err}`);
 }
 const commands = {};

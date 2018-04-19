@@ -30,6 +30,47 @@ body {
   font-size: 5vh;
 }
 
+.controls-header h1 {
+  margin: 0;
+  display: flex;
+  flex: 1;
+  font-size: 5vh;
+}
+
+.controls-header .link,
+.controls-header .status {
+  flex: 1;
+  color: #eee;
+  text-decoration: none;
+  display: flex;
+  margin: 0 15px;
+  align-items: center;
+  flex-direction: column;
+}
+
+.controls-header .link .fa {
+  color: #0f9d58;
+  transform: rotate(255deg);
+}
+.controls-header .link .fa:hover,
+.controls-header .link .fa:focus {
+  color: #eee;
+  text-decoration: none;
+}
+
+.controls-header .status {
+  color: #606060;
+  transition: color 0.5s;
+}
+
+.controls-header .status.connected {
+  color: #567714;
+}
+
+.controls-header .status.disconnected {
+  color: #801515;
+}
+
 .controls {
   background: radial-gradient(#303030, #000);
   flex: 4;
