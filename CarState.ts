@@ -39,18 +39,25 @@ export class CarState {
     }
   }
 
-  public *diffCommands(oldState: CarState) {
+  public diffCommand(oldState: CarState) {
+    let command = '';
     if (oldState.forward !== this.forward)
-      yield `gpio write 27 ${oldState.forward ? STOP : GO}`;
+      command = `gpio write 27 ${oldState.forward ? STOP : GO}`;
 
     if (oldState.back !== this.back)
-      yield `gpio write 1 ${oldState.back ? STOP : GO}`;
+      command =
+        (command.length ? ' && ' : '') +
+        `gpio write 1 ${oldState.back ? STOP : GO}`;
 
     if (oldState.left !== this.left)
-      yield `gpio write 6 ${oldState.left ? STOP : GO}`;
+      command =
+        (command.length ? ' && ' : '') +
+        `gpio write 6 ${oldState.left ? STOP : GO}`;
 
     if (oldState.right !== this.right)
-      yield `gpio write 26 ${oldState.right ? STOP : GO}`;
+      command =
+        (command.length ? ' && ' : '') +
+        `gpio write 26 ${oldState.right ? STOP : GO}`;
   }
 
   toString() {

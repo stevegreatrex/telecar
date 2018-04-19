@@ -53,9 +53,9 @@ socketServer.on('connection', ws => {
     ws.on('message', (direction) => __awaiter(this, void 0, void 0, function* () {
         const newState = new CarState_1.CarState(direction);
         console.log(`Update: ${currentState.toString()} -> ${newState.toString()}`);
-        const commands = newState.diffCommands(currentState);
+        const command = newState.diffCommand(currentState);
         currentState = newState;
-        for (var command of commands) {
+        if (command) {
             console.log(`    ${command}`);
             yield asyncExec(command);
         }

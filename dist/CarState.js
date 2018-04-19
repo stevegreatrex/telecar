@@ -38,15 +38,22 @@ class CarState {
             }
         }
     }
-    *diffCommands(oldState) {
+    diffCommand(oldState) {
+        let command = '';
         if (oldState.forward !== this.forward)
-            yield `gpio write 27 ${oldState.forward ? exports.STOP : exports.GO}`;
+            command = `gpio write 27 ${oldState.forward ? exports.STOP : exports.GO}`;
         if (oldState.back !== this.back)
-            yield `gpio write 1 ${oldState.back ? exports.STOP : exports.GO}`;
+            command =
+                (command.length ? ' && ' : '') +
+                    `gpio write 1 ${oldState.back ? exports.STOP : exports.GO}`;
         if (oldState.left !== this.left)
-            yield `gpio write 6 ${oldState.left ? exports.STOP : exports.GO}`;
+            command =
+                (command.length ? ' && ' : '') +
+                    `gpio write 6 ${oldState.left ? exports.STOP : exports.GO}`;
         if (oldState.right !== this.right)
-            yield `gpio write 26 ${oldState.right ? exports.STOP : exports.GO}`;
+            command =
+                (command.length ? ' && ' : '') +
+                    `gpio write 26 ${oldState.right ? exports.STOP : exports.GO}`;
     }
     toString() {
         return `F:${this.forward} B: ${this.back} L: ${this.left} R: ${this.right}`;
