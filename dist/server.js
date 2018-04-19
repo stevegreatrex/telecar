@@ -14,6 +14,7 @@ const url = require("url");
 const path = require("path");
 const ws_1 = require("ws");
 const child_process_1 = require("child_process");
+const CarState_1 = require("./CarState");
 const port = 8080;
 const server = http_1.createServer((request, response) => {
     const uri = url.parse(request.url).pathname;
@@ -47,23 +48,14 @@ server.listen(port, (err) => {
         console.log(`Server is listening on ${port}`);
 });
 const socketServer = new ws_1.Server({ port: 8090 });
-let currentDirection;
+let currentState = new CarState_1.CarState();
 socketServer.on('connection', ws => {
     ws.on('message', (direction) => __awaiter(this, void 0, void 0, function* () {
-        if (direction === currentDirection)
-            return;
-        currentDirection = direction;
         console.log(`Incoming: ${direction}`);
-        if (commands[direction]) {
-            for (const command of commands[direction])
-                yield asyncExec(command);
-        }
-        else if (!direction) {
-            yield asyncExec('gpio write 1 1');
-            yield asyncExec('gpio write 6 1');
-            yield asyncExec('gpio write 26 1');
-            yield asyncExec('gpio write 27 1');
-        }
+        const newState = new CarState_1.CarState(direction);
+        for (var command of newState.diffCommands(currentState))
+            yield asyncExec(command);
+        currentState = newState;
     }));
 });
 const asyncExec = (command) => new Promise((resolve, reject) => {
@@ -90,11 +82,4 @@ const initGpio = () => __awaiter(this, void 0, void 0, function* () {
     yield asyncExec('gpio mode 27 out');
 });
 initGpio();
-const commands = {
-    forward: ['gpio write 27 0'],
-    'forward left': ['gpio write 27 0', 'gpio write 6 0'],
-    'forward right': ['gpio write 27 0', 'gpio write 26 0'],
-    back: ['gpio write 1 0'],
-    'back left': ['gpio write 1 0', 'gpio write 6 0'],
-    'back right': ['gpio write 1 0', 'gpio write 26 0']
-};
+const commands = {};

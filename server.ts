@@ -4,6 +4,7 @@ import * as url from 'url';
 import * as path from 'path';
 import { Server } from 'ws';
 import { exec } from 'child_process';
+import { CarState } from './CarState';
 
 const port = 8080;
 
@@ -42,21 +43,16 @@ server.listen(port, (err: any) => {
 });
 
 const socketServer = new Server({ port: 8090 });
-let currentDirection: string;
+let currentState = new CarState();
 socketServer.on('connection', ws => {
   ws.on('message', async (direction: string) => {
-    if (direction === currentDirection) return;
-
-    currentDirection = direction;
     console.log(`Incoming: ${direction}`);
-    if (commands[direction]) {
-      for (const command of commands[direction]) await asyncExec(command);
-    } else if (!direction) {
-      await asyncExec('gpio write 1 1');
-      await asyncExec('gpio write 6 1');
-      await asyncExec('gpio write 26 1');
-      await asyncExec('gpio write 27 1');
-    }
+    const newState = new CarState(direction);
+
+    for (var command of newState.diffCommands(currentState))
+      await asyncExec(command);
+
+    currentState = newState;
   });
 });
 
@@ -86,11 +82,4 @@ const initGpio = async () => {
 
 initGpio();
 
-const commands: { [key: string]: string[] } = {
-  forward: ['gpio write 27 0'],
-  'forward left': ['gpio write 27 0', 'gpio write 6 0'],
-  'forward right': ['gpio write 27 0', 'gpio write 26 0'],
-  back: ['gpio write 1 0'],
-  'back left': ['gpio write 1 0', 'gpio write 6 0'],
-  'back right': ['gpio write 1 0', 'gpio write 26 0']
-};
+const commands: { [key: string]: string[] } = {};
