@@ -45,13 +45,10 @@ const socketServer = new Server({ port: 8090 });
 let currentDirection: string;
 socketServer.on('connection', ws => {
   ws.on('message', async (direction: string) => {
-    console.log(`Incoming: ${direction}`);
-    //stop everything
-    // await asyncExec('gpio write 27 1');
-    // await asyncExec('gpio write 1 1');
-    // await asyncExec('gpio write 6 1');
-    // await asyncExec('gpio write 26 1');
+    if (direction === currentDirection) return;
 
+    currentDirection = direction;
+    console.log(`Incoming: ${direction}`);
     if (commands[direction]) {
       for (const command of commands[direction]) await asyncExec(command);
     }
