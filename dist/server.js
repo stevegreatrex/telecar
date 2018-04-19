@@ -47,7 +47,7 @@ server.listen(port, (err) => {
     if (err)
         console.error('Error on startup', err);
     else
-        console.log(`Server is listening on ${port}`);
+        log(`Server is listening on ${port}`);
 });
 const socketServer = new ws_1.Server({ port: 8090 });
 let currentState = new CarState_1.CarState();
@@ -63,7 +63,7 @@ socketServer.on('connection', ws => {
     }));
 });
 const asyncExec = (command) => new Promise((resolve, reject) => {
-    console.log(`${command.debugInfo} ${command.commandString}`);
+    log(`${command.debugInfo} ${command.commandString}`);
     child_process_1.exec(command.commandString, (err, stdout, stderr) => {
         if (err) {
             console.error(err);
@@ -74,10 +74,13 @@ const asyncExec = (command) => new Promise((resolve, reject) => {
             reject(stderr);
         }
         else {
-            console.log(stdout);
+            log(stdout);
             resolve();
         }
     });
 });
 asyncExec(new InitCommand_1.InitCommand());
+function log(message) {
+    console.log(`${new Date().toISOString()} ${message}`);
+}
 const commands = {};

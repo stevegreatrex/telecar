@@ -42,7 +42,7 @@ const server = createServer((request, response) => {
 
 server.listen(port, (err: any) => {
   if (err) console.error('Error on startup', err);
-  else console.log(`Server is listening on ${port}`);
+  else log(`Server is listening on ${port}`);
 });
 
 const socketServer = new Server({ port: 8090 });
@@ -59,7 +59,7 @@ socketServer.on('connection', ws => {
 
 const asyncExec = (command: ICommand) =>
   new Promise((resolve, reject) => {
-    console.log(`${command.debugInfo} ${command.commandString}`);
+    log(`${command.debugInfo} ${command.commandString}`);
     exec(command.commandString, (err, stdout, stderr) => {
       if (err) {
         console.error(err);
@@ -68,12 +68,16 @@ const asyncExec = (command: ICommand) =>
         console.error(stderr);
         reject(stderr);
       } else {
-        console.log(stdout);
+        log(stdout);
         resolve();
       }
     });
   });
 
 asyncExec(new InitCommand());
+
+function log(message: any) {
+  console.log(`${new Date().toISOString()} ${message}`);
+}
 
 const commands: { [key: string]: string[] } = {};
