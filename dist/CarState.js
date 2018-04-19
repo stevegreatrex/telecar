@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GO = 0;
-exports.STOP = 1;
 class CarState {
-    constructor(direction) {
+    constructor(direction = '') {
         this.forward = false;
         this.back = false;
         this.left = false;
         this.right = false;
+        direction = direction.trim();
         switch (direction) {
             case 'forward': {
                 this.forward = true;
@@ -35,29 +34,23 @@ class CarState {
             case 'back right': {
                 this.back = true;
                 this.right = true;
+                break;
             }
         }
     }
-    diffCommand(oldState) {
-        let command = '';
-        if (oldState.forward !== this.forward)
-            command = `gpio write 27 ${oldState.forward ? exports.STOP : exports.GO}`;
-        if (oldState.back !== this.back)
-            command =
-                (command.length ? ' && ' : '') +
-                    `gpio write 1 ${oldState.back ? exports.STOP : exports.GO}`;
-        if (oldState.left !== this.left)
-            command =
-                (command.length ? ' && ' : '') +
-                    `gpio write 6 ${oldState.left ? exports.STOP : exports.GO}`;
-        if (oldState.right !== this.right)
-            command =
-                (command.length ? ' && ' : '') +
-                    `gpio write 26 ${oldState.right ? exports.STOP : exports.GO}`;
-        return command;
-    }
     toString() {
-        return `F:${this.forward} B: ${this.back} L: ${this.left} R: ${this.right}`;
+        let direction = '';
+        if (this.left)
+            direction += '🡸';
+        if (this.forward)
+            direction += '🡹';
+        if (this.back)
+            direction += '🡻';
+        if (this.right)
+            direction += '🡺';
+        if (!direction.length)
+            direction = '⛔';
+        return direction;
     }
 }
 exports.CarState = CarState;

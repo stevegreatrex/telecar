@@ -5,6 +5,9 @@ import * as path from 'path';
 import { Server } from 'ws';
 import { exec } from 'child_process';
 import { CarState } from './CarState';
+import { InitCommand } from './InitCommand';
+import { ICommand } from './ICommand';
+import { MoveCommand } from './MoveCommand';
 
 const port = 8080;
 
@@ -47,20 +50,17 @@ let currentState = new CarState();
 socketServer.on('connection', ws => {
   ws.on('message', async (direction: string) => {
     const newState = new CarState(direction);
-    console.log(`Update: ${currentState.toString()} -> ${newState.toString()}`);
-    const command = newState.diffCommand(currentState);
+    const command = new MoveCommand(currentState, newState);
+    if (!command.commandString) return;
     currentState = newState;
-    if (command) {
-      console.log(`    ${command}`);
-      await asyncExec(command);
-    }
+    if (command) await asyncExec(command);
   });
 });
 
-const asyncExec = (command: string) =>
+const asyncExec = (command: ICommand) =>
   new Promise((resolve, reject) => {
-    console.log(`Executing ${command}`);
-    exec(command, (err, stdout, stderr) => {
+    console.log(`${command.debugInfo} ${command.commandString}`);
+    exec(command.commandString, (err, stdout, stderr) => {
       if (err) {
         console.error(err);
         reject(err);
@@ -74,13 +74,6 @@ const asyncExec = (command: string) =>
     });
   });
 
-const initGpio = async () => {
-  await asyncExec('gpio mode 1 out');
-  await asyncExec('gpio mode 6 out');
-  await asyncExec('gpio mode 26 out');
-  await asyncExec('gpio mode 27 out');
-};
-
-initGpio();
+asyncExec(new InitCommand());
 
 const commands: { [key: string]: string[] } = {};

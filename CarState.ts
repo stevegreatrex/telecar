@@ -1,13 +1,11 @@
-export const GO = 0;
-export const STOP = 1;
-
 export class CarState {
   public forward: boolean = false;
   public back: boolean = false;
   public left: boolean = false;
   public right: boolean = false;
 
-  constructor(direction?: string) {
+  constructor(direction = '') {
+    direction = direction.trim();
     switch (direction) {
       case 'forward': {
         this.forward = true;
@@ -35,34 +33,19 @@ export class CarState {
       case 'back right': {
         this.back = true;
         this.right = true;
+        break;
       }
     }
   }
 
-  public diffCommand(oldState: CarState) {
-    let command = '';
-    if (oldState.forward !== this.forward)
-      command = `gpio write 27 ${oldState.forward ? STOP : GO}`;
-
-    if (oldState.back !== this.back)
-      command =
-        (command.length ? ' && ' : '') +
-        `gpio write 1 ${oldState.back ? STOP : GO}`;
-
-    if (oldState.left !== this.left)
-      command =
-        (command.length ? ' && ' : '') +
-        `gpio write 6 ${oldState.left ? STOP : GO}`;
-
-    if (oldState.right !== this.right)
-      command =
-        (command.length ? ' && ' : '') +
-        `gpio write 26 ${oldState.right ? STOP : GO}`;
-
-    return command;
-  }
-
   toString() {
-    return `F:${this.forward} B: ${this.back} L: ${this.left} R: ${this.right}`;
+    let direction = '';
+
+    if (this.left) direction += '🡸';
+    if (this.forward) direction += '🡹';
+    if (this.back) direction += '🡻';
+    if (this.right) direction += '🡺';
+    if (!direction.length) direction = '⛔';
+    return direction;
   }
 }

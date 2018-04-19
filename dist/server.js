@@ -15,6 +15,8 @@ const path = require("path");
 const ws_1 = require("ws");
 const child_process_1 = require("child_process");
 const CarState_1 = require("./CarState");
+const InitCommand_1 = require("./InitCommand");
+const MoveCommand_1 = require("./MoveCommand");
 const port = 8080;
 const server = http_1.createServer((request, response) => {
     const uri = url.parse(request.url).pathname;
@@ -52,18 +54,17 @@ let currentState = new CarState_1.CarState();
 socketServer.on('connection', ws => {
     ws.on('message', (direction) => __awaiter(this, void 0, void 0, function* () {
         const newState = new CarState_1.CarState(direction);
-        console.log(`Update: ${currentState.toString()} -> ${newState.toString()}`);
-        const command = newState.diffCommand(currentState);
+        const command = new MoveCommand_1.MoveCommand(currentState, newState);
+        if (!command.commandString)
+            return;
         currentState = newState;
-        if (command) {
-            console.log(`    ${command}`);
+        if (command)
             yield asyncExec(command);
-        }
     }));
 });
 const asyncExec = (command) => new Promise((resolve, reject) => {
-    console.log(`Executing ${command}`);
-    child_process_1.exec(command, (err, stdout, stderr) => {
+    console.log(`${command.debugInfo} ${command.commandString}`);
+    child_process_1.exec(command.commandString, (err, stdout, stderr) => {
         if (err) {
             console.error(err);
             reject(err);
@@ -78,11 +79,5 @@ const asyncExec = (command) => new Promise((resolve, reject) => {
         }
     });
 });
-const initGpio = () => __awaiter(this, void 0, void 0, function* () {
-    yield asyncExec('gpio mode 1 out');
-    yield asyncExec('gpio mode 6 out');
-    yield asyncExec('gpio mode 26 out');
-    yield asyncExec('gpio mode 27 out');
-});
-initGpio();
+asyncExec(new InitCommand_1.InitCommand());
 const commands = {};
