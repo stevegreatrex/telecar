@@ -1,0 +1,14 @@
+{
+  "short_name": "Telecar",
+  "name": "Telecar Remote Control",
+  "icons": [
+    {
+      "src": "phone-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait"
+}

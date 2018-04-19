@@ -72,6 +72,7 @@ socket.onclose = e => {
 socket.onerror = e => {
     setDisconnected(e);
 };
+window.scrollTo(0, 1);
 log('Loaded');
 function log(text, type = 'info') {
     logContainer.innerHTML = text;

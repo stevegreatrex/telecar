@@ -83,6 +83,7 @@ socket.onerror = e => {
   setDisconnected(e);
 };
 
+window.scrollTo(0, 1);
 log('Loaded');
 
 type LogTypes = 'info' | 'error';
