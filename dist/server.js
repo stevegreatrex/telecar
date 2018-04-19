@@ -57,7 +57,7 @@ socketServer.on('connection', ws => {
         // await asyncExec('gpio write 6 1');
         // await asyncExec('gpio write 26 1');
         if (commands[direction]) {
-            for (const command in commands[direction])
+            for (const command of commands[direction])
                 yield asyncExec(command);
         }
     }));
