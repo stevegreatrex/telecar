@@ -7,6 +7,14 @@ class MoveCommand {
         this.oldState = oldState;
         this.newState = newState;
     }
+    run(pins) {
+        Object.keys(exports.directionPins).forEach(directionString => {
+            const direction = directionString;
+            if (this.newState[direction] === this.oldState[direction])
+                return;
+            pins[direction].writeSync(this.newState[direction] ? exports.GO : exports.STOP);
+        });
+    }
     get commandString() {
         let command = '';
         Object.keys(exports.directionPins).forEach(directionString => {

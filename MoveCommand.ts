@@ -1,5 +1,6 @@
 import { CarState } from './CarState';
 import { ICommand } from './ICommand';
+import { Pins } from './Pins';
 
 export type Direction = 'forward' | 'back' | 'left' | 'right';
 export const GO = 0;
@@ -7,6 +8,15 @@ export const STOP = 1;
 
 export class MoveCommand implements ICommand {
   constructor(public oldState: CarState, public newState: CarState) {}
+
+  run(pins: Pins) {
+    Object.keys(directionPins).forEach(directionString => {
+      const direction = directionString as Direction;
+      if (this.newState[direction] === this.oldState[direction]) return;
+
+      pins[direction].writeSync(this.newState[direction] ? GO : STOP);
+    });
+  }
 
   get commandString() {
     let command = '';
