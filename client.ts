@@ -2,6 +2,7 @@ const inputSink = document.getElementsByClassName('controls-container')[0];
 const logContainer = document.getElementsByClassName('log')[0];
 const arrow = document.getElementsByClassName('arrow')[0];
 const connectionStatus = document.getElementsByClassName('status')[0];
+const title = document.querySelectorAll('.controls-header h1')[0];
 
 let isConnected = false;
 let touching = false;
@@ -20,6 +21,8 @@ function setDisconnected(error?: any) {
   else log('Telecar Connection Lost', 'error');
 }
 
+title.addEventListener('click', e => window.location.reload(true));
+
 inputSink.addEventListener('touchstart', e => {
   if (!isConnected) return;
   const touchEvent = e as TouchEvent;
@@ -29,6 +32,7 @@ inputSink.addEventListener('touchstart', e => {
 });
 
 inputSink.addEventListener('touchmove', e => {
+  e.preventDefault();
   if (!isConnected) return;
   if (!touching) return;
 
