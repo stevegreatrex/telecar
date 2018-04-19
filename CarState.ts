@@ -1,3 +1,6 @@
+export const GO = 0;
+export const STOP = 1;
+
 export class CarState {
   public forward: boolean = false;
   public back: boolean = false;
@@ -36,15 +39,17 @@ export class CarState {
     }
   }
 
-  public *diffCommands(other: CarState) {
-    if (other.forward !== this.forward)
-      yield `gpio write 27 ${other.forward ? 0 : 1}`;
+  public *diffCommands(oldState: CarState) {
+    if (oldState.forward !== this.forward)
+      yield `gpio write 27 ${oldState.forward ? STOP : GO}`;
 
-    if (other.back !== this.back) yield `gpio write 1 ${other.back ? 0 : 1}`;
+    if (oldState.back !== this.back)
+      yield `gpio write 1 ${oldState.back ? STOP : GO}`;
 
-    if (other.left !== this.left) yield `gpio write 6 ${other.left ? 0 : 1}`;
+    if (oldState.left !== this.left)
+      yield `gpio write 6 ${oldState.left ? STOP : GO}`;
 
-    if (other.right !== this.right)
-      yield `gpio write 26 ${other.right ? 0 : 1}`;
+    if (oldState.right !== this.right)
+      yield `gpio write 26 ${oldState.right ? STOP : GO}`;
   }
 }

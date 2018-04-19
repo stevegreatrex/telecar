@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.GO = 0;
+exports.STOP = 1;
 class CarState {
     constructor(direction) {
         this.forward = false;
@@ -36,15 +38,15 @@ class CarState {
             }
         }
     }
-    *diffCommands(other) {
-        if (other.forward !== this.forward)
-            yield `gpio write 27 ${other.forward ? 0 : 1}`;
-        if (other.back !== this.back)
-            yield `gpio write 1 ${other.back ? 0 : 1}`;
-        if (other.left !== this.left)
-            yield `gpio write 6 ${other.left ? 0 : 1}`;
-        if (other.right !== this.right)
-            yield `gpio write 26 ${other.right ? 0 : 1}`;
+    *diffCommands(oldState) {
+        if (oldState.forward !== this.forward)
+            yield `gpio write 27 ${oldState.forward ? exports.STOP : exports.GO}`;
+        if (oldState.back !== this.back)
+            yield `gpio write 1 ${oldState.back ? exports.STOP : exports.GO}`;
+        if (oldState.left !== this.left)
+            yield `gpio write 6 ${oldState.left ? exports.STOP : exports.GO}`;
+        if (oldState.right !== this.right)
+            yield `gpio write 26 ${oldState.right ? exports.STOP : exports.GO}`;
     }
 }
 exports.CarState = CarState;
