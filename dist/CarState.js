@@ -2,12 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 class CarState {
     constructor(direction = '') {
+        this.direction = direction;
         this.forward = false;
         this.back = false;
         this.left = false;
         this.right = false;
-        direction = direction.trim();
-        switch (direction) {
+        this.direction = direction.trim();
+        switch (this.direction) {
             case 'forward': {
                 this.forward = true;
                 break;
@@ -39,18 +40,22 @@ class CarState {
         }
     }
     toString() {
-        let direction = '';
-        if (this.left)
-            direction += '🡸';
-        if (this.forward)
-            direction += '🡹';
-        if (this.back)
-            direction += '🡻';
-        if (this.right)
-            direction += '🡺';
-        if (!direction.length)
-            direction = '⛔';
-        return direction;
+        switch (this.direction) {
+            case 'forward':
+                return '🡹';
+            case 'forward left':
+                return '🡼';
+            case 'forward right':
+                return '🡽';
+            case 'back':
+                return '🡻';
+            case 'back left':
+                return '🡿';
+            case 'back right':
+                return '🡾';
+            default:
+                return '⛔';
+        }
     }
 }
 exports.CarState = CarState;

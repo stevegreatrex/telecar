@@ -4,9 +4,9 @@ export class CarState {
   public left: boolean = false;
   public right: boolean = false;
 
-  constructor(direction = '') {
-    direction = direction.trim();
-    switch (direction) {
+  constructor(private direction = '') {
+    this.direction = direction.trim();
+    switch (this.direction) {
       case 'forward': {
         this.forward = true;
         break;
@@ -39,13 +39,21 @@ export class CarState {
   }
 
   toString() {
-    let direction = '';
-
-    if (this.left) direction += '🡸';
-    if (this.forward) direction += '🡹';
-    if (this.back) direction += '🡻';
-    if (this.right) direction += '🡺';
-    if (!direction.length) direction = '⛔';
-    return direction;
+    switch (this.direction) {
+      case 'forward':
+        return '🡹';
+      case 'forward left':
+        return '🡼';
+      case 'forward right':
+        return '🡽';
+      case 'back':
+        return '🡻';
+      case 'back left':
+        return '🡿';
+      case 'back right':
+        return '🡾';
+      default:
+        return '⛔';
+    }
   }
 }
