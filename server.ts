@@ -47,14 +47,15 @@ socketServer.on('connection', ws => {
   ws.on('message', async (direction: string) => {
     console.log(`Incoming: ${direction}`);
     //stop everything
-    await asyncExec('gpio write 27 1');
-    await asyncExec('gpio write 1 1');
-    await asyncExec('gpio write 6 1');
-    await asyncExec('gpio write 26 1');
+    // await asyncExec('gpio write 27 1');
+    // await asyncExec('gpio write 1 1');
+    // await asyncExec('gpio write 6 1');
+    // await asyncExec('gpio write 26 1');
 
-    if (commands[direction]) {
-      for (const command in commands[direction]) await asyncExec(command);
-    }
+    // if (commands[direction]) {
+    //   for (const command in commands[direction]) await asyncExec(command);
+    // }
+    await asyncExec('gpio write 27 0');
   });
 });
 

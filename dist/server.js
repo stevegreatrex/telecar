@@ -52,14 +52,14 @@ socketServer.on('connection', ws => {
     ws.on('message', (direction) => __awaiter(this, void 0, void 0, function* () {
         console.log(`Incoming: ${direction}`);
         //stop everything
-        yield asyncExec('gpio write 27 1');
-        yield asyncExec('gpio write 1 1');
-        yield asyncExec('gpio write 6 1');
-        yield asyncExec('gpio write 26 1');
-        if (commands[direction]) {
-            for (const command in commands[direction])
-                yield asyncExec(command);
-        }
+        // await asyncExec('gpio write 27 1');
+        // await asyncExec('gpio write 1 1');
+        // await asyncExec('gpio write 6 1');
+        // await asyncExec('gpio write 26 1');
+        // if (commands[direction]) {
+        //   for (const command in commands[direction]) await asyncExec(command);
+        // }
+        yield asyncExec('gpio write 27 0');
     }));
 });
 const asyncExec = (command) => new Promise((resolve, reject) => {
