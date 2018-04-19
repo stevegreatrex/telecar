@@ -48,11 +48,10 @@ socketServer.on('connection', ws => {
   ws.on('message', async (direction: string) => {
     console.log(`Incoming: ${direction}`);
     const newState = new CarState(direction);
-
-    for (var command of newState.diffCommands(currentState))
-      await asyncExec(command);
-
+    const commands = newState.diffCommands(currentState);
     currentState = newState;
+
+    for (var command of commands) await asyncExec(command);
   });
 });
 

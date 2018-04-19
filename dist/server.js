@@ -53,9 +53,10 @@ socketServer.on('connection', ws => {
     ws.on('message', (direction) => __awaiter(this, void 0, void 0, function* () {
         console.log(`Incoming: ${direction}`);
         const newState = new CarState_1.CarState(direction);
-        for (var command of newState.diffCommands(currentState))
-            yield asyncExec(command);
+        const commands = newState.diffCommands(currentState);
         currentState = newState;
+        for (var command of commands)
+            yield asyncExec(command);
     }));
 });
 const asyncExec = (command) => new Promise((resolve, reject) => {
