@@ -46,6 +46,15 @@ body {
   align-items: center;
   justify-content: center;
   overflow: auto;
+  transition: background-color 1s;
+}
+
+.log.info {
+  background: #303030;
+}
+
+.log.error {
+  background: #550000;
 }
 
 .arrow {

@@ -64,13 +64,13 @@ try {
   };
 
   socket.onclose = e => {
-    log(`close error: ${JSON.stringify(e)}`);
-    log(`close code: ${e.code}`);
-    log(`close reason: ${e.reason}`);
+    connected = false;
+    log('Connection Lost', 'error');
   };
 
   socket.onerror = e => {
-    log(`error: ${JSON.stringify(e)}`);
+    connected = false;
+    log(`Error: ${JSON.stringify(e)}`);
   };
 
   log('Loaded');
@@ -78,6 +78,8 @@ try {
   log(`overall error: ${JSON.stringify(err, null, 2)}`);
 }
 
-function log(text: string) {
+type LogTypes = 'info' | 'error';
+function log(text: string, type: LogTypes = 'info') {
   logContainer.innerHTML = text;
+  logContainer.setAttribute('class', `log ${type}`);
 }

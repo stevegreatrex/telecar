@@ -54,7 +54,7 @@ class CarState {
             case 'back right':
                 return '🡾';
             default:
-                return '⛔';
+                return '—';
         }
     }
 }
