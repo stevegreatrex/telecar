@@ -58,6 +58,12 @@ socketServer.on('connection', ws => {
             for (const command of commands[direction])
                 yield asyncExec(command);
         }
+        else if (!direction) {
+            yield asyncExec('gpio write 1 1');
+            yield asyncExec('gpio write 6 1');
+            yield asyncExec('gpio write 26 1');
+            yield asyncExec('gpio write 27 1');
+        }
     }));
 });
 const asyncExec = (command) => new Promise((resolve, reject) => {

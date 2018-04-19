@@ -51,6 +51,11 @@ socketServer.on('connection', ws => {
     console.log(`Incoming: ${direction}`);
     if (commands[direction]) {
       for (const command of commands[direction]) await asyncExec(command);
+    } else if (!direction) {
+      await asyncExec('gpio write 1 1');
+      await asyncExec('gpio write 6 1');
+      await asyncExec('gpio write 26 1');
+      await asyncExec('gpio write 27 1');
     }
   });
 });
