@@ -46,12 +46,15 @@ const socketServer = new Server({ port: 8090 });
 let currentState = new CarState();
 socketServer.on('connection', ws => {
   ws.on('message', async (direction: string) => {
-    console.log(`Incoming: ${direction}`);
     const newState = new CarState(direction);
+    console.log(`Update: ${currentState.toString()} -> ${newState.toString()}`);
     const commands = newState.diffCommands(currentState);
     currentState = newState;
 
-    for (var command of commands) await asyncExec(command);
+    for (var command of commands) {
+      console.log(`    ${command}`);
+      await asyncExec(command);
+    }
   });
 });
 

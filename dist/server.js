@@ -51,12 +51,14 @@ const socketServer = new ws_1.Server({ port: 8090 });
 let currentState = new CarState_1.CarState();
 socketServer.on('connection', ws => {
     ws.on('message', (direction) => __awaiter(this, void 0, void 0, function* () {
-        console.log(`Incoming: ${direction}`);
         const newState = new CarState_1.CarState(direction);
+        console.log(`Update: ${currentState.toString()} -> ${newState.toString()}`);
         const commands = newState.diffCommands(currentState);
         currentState = newState;
-        for (var command of commands)
+        for (var command of commands) {
+            console.log(`    ${command}`);
             yield asyncExec(command);
+        }
     }));
 });
 const asyncExec = (command) => new Promise((resolve, reject) => {

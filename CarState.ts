@@ -52,4 +52,8 @@ export class CarState {
     if (oldState.right !== this.right)
       yield `gpio write 26 ${oldState.right ? STOP : GO}`;
   }
+
+  toString() {
+    return `F:${this.forward} B: ${this.back} L: ${this.left} R: ${this.right}`;
+  }
 }
