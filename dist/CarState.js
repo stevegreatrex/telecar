@@ -54,6 +54,7 @@ class CarState {
             command =
                 (command.length ? ' && ' : '') +
                     `gpio write 26 ${oldState.right ? exports.STOP : exports.GO}`;
+        return command;
     }
     toString() {
         return `F:${this.forward} B: ${this.back} L: ${this.left} R: ${this.right}`;

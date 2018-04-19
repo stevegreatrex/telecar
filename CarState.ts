@@ -58,6 +58,8 @@ export class CarState {
       command =
         (command.length ? ' && ' : '') +
         `gpio write 26 ${oldState.right ? STOP : GO}`;
+
+    return command;
   }
 
   toString() {
